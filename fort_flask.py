@@ -21,7 +21,7 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 @app.route('/')
 def show_entries():
     db = get_db()
-    cur = db.execute('select id, title, text, upload from entries order by id desc')
+    cur = db.execute('select id, title, text, upload from entries where parent_id is null order by id desc')
     entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries)
 
@@ -49,7 +49,7 @@ def delete(id):
     filename = cur.fetchone()
     if filename:
         os.unlink(app.config['UPLOAD_DIR'] + '/' + filename[0])
-    db.execute('delete from entries where id = ?', (id,))
+    db.execute('delete from entries where id = ? order by id desc', (id,))
     db.commit()
     flash('Post removed')
     return redirect(url_for('show_entries'))
@@ -71,8 +71,11 @@ def reply(id):
         else:
             filename = ''  
         db = get_db()
-        cur = db.execute('insert intop entries(title, text, upload, parent_id) values (?, ?, ?, ?)',
+        cur = db.execute('insert into entries(title, text, upload, parent_id) values (?, ?, ?, ?)',
             [request.form['title'], request.form['text'], filename, id])
+        db.commit()
+        flash('Replied')
+        return redirect(url_for('show_entries'))
 
 '''
 database functions

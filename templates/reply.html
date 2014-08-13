@@ -13,7 +13,7 @@
   <ul class=entries>
   {% for entry in entries %}
     <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}<br>
-    <img src="./static/uploads/{{ entry.upload }}"><br>
+    <img src="/static/uploads/{{ entry.upload }}"><br>
     <form action="/delete/{{ entry.id }}" method=POST>
         <button type='submit'>Delete</button>
     </form>

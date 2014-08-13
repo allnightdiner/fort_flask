@@ -2,7 +2,8 @@ fort_flask - take a sip
 ==========
 A fort tree inspired image board in flask.
 
-Currently does not have users, multiple boards, or post replys.
+Currently does not have users, or multiple boards. Can only view replies to 
+parent thread in the reply view.
 
 All the functions use sqlite3 instead of sqlalchemy. Images stored locally in static/uploads.
 
