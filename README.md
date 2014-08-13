@@ -15,3 +15,4 @@ To initialize the database run the following in a python script or interpreter:
     from fort_flask import init_db
     init_db
 
+bleh
