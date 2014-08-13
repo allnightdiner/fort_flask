@@ -12,7 +12,7 @@ app.config.from_object(__name__)
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'fort_flask.db'),
     DEBUG=True,
-    SECRET_KEY='jkaskjfjklasjkvneqoiiiobijiovi-030-320jfvjmvmvirn3krnvir3gv',
+    SECRET_KEY='change this to something reasonable',
     UPLOAD_DIR=os.path.join(app.root_path, 'static/uploads'),
     MAX_CONTENT_LENGTH=(16 * 1024 * 1024)
 ))
@@ -54,7 +54,25 @@ def delete(id):
     flash('Post removed')
     return redirect(url_for('show_entries'))
     
-    
+@app.route('/reply/<int:id>', methods=['GET', 'POST'])
+def reply(id):
+    if request.method == 'GET':
+        db = get_db()
+        cur = db.execute('select id, title, text, upload from entries where id = ?', (id,))
+        entries = cur.fetchall()
+        cur = db.execute('select id, title, text, upload from entries where parent_id = ?', (id,))
+        entries += cur.fetchall()
+        return render_template('reply.html', entries=entries)
+    else:
+        file = request.files['upload']
+        if file and imghdr.what(file):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_DIR'], filename))
+        else:
+            filename = ''  
+        db = get_db()
+        cur = db.execute('insert intop entries(title, text, upload, parent_id) values (?, ?, ?, ?)',
+            [request.form['title'], request.form['text'], filename, id])
 
 '''
 database functions

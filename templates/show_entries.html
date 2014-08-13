@@ -14,6 +14,9 @@
   {% for entry in entries %}
     <li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}<br>
     <img src="./static/uploads/{{ entry.upload }}"><br>
+    <form action="/reply/{{ entry.id }}" method=GET>
+        <button type='submit'>Reply</button>
+    </form>
     <form action="/delete/{{ entry.id }}" method=POST>
         <button type='submit'>Delete</button>
     </form>
