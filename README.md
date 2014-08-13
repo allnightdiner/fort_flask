@@ -1,4 +1,4 @@
-fort_flask
+fort_flask - take a sip
 ==========
 A fort tree inspired image board in flask.
 
