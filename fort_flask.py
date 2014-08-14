@@ -47,9 +47,9 @@ def delete(id):
     db = get_db()
     cur = db.execute('select upload from entries where id = ?', (id,)) 
     filename = cur.fetchone()
-    if filename:
+    if filename[0] != '':
         os.unlink(app.config['UPLOAD_DIR'] + '/' + filename[0])
-    db.execute('delete from entries where id = ? order by id desc', (id,))
+    db.execute('delete from entries where id = ? OR parent_id = ?', (id,id,))
     db.commit()
     flash('Post removed')
     return redirect(url_for('show_entries'))
